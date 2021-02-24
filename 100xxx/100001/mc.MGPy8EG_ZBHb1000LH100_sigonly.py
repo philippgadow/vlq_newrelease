@@ -361,25 +361,64 @@ def processmaker(processmode='fulldecay'):
 
 def paramdictmaker():
     chiralityIndex = runArgs.chirality.replace('H','')
-    all_blocks = ["k"+a+b+c for a in ["t","b"] for b in ["l","r"] for c in ["w", "h", "z"]] + ["k"+a+b+"w" for a in ["y","x"] for b in ["l","r"]]
-    all_vars = ["K"+a+b+c+d for a in ["T","B"] for b in ["L","R"] for c in ["w", "h", "z"] for d in ["1","2","3"]] + ["K"+a+b+d for a in ["Y","X"] for b in ["L","R"] for d in ["1","2","3"]]
+
+    all_blocks_xy = set(["k"+a+b+"w" for a in ["y","x"] for b in ["l","r"]])
+    all_vars_xy = set(["K"+a+b+d for a in ["Y","X"] for b in ["L","R"] for d in ["1","2","3"]])
+
+    all_blocks_tb = set(["k"+a+b+c for a in ["t","b"] for b in ["l","r"] for c in ["w", "h", "z"]])
+    all_vars_tb = set(["K"+a+b+c+d for a in ["T","B"] for b in ["L","R"] for c in ["w", "h", "z"] for d in ["1","2","3"]])
+
+    all_blocks = all_blocks_xy.union(all_blocks_tb)
+
+    set_to_zero_string = "0.000000e+01"
 
     paramdict = {}
-    for block in ['mass', 'decay'] + all_blocks:
+    for block in ['mass', 'decay'] + list(all_blocks):
         paramdict[block] = {}
 
     if runArgs.vlqmode in ['X', 'Y']:
         paramdict['mass']['M' + runArgs.vlqmode] = str(runArgs.mass)
         paramdict['decay']['W' + runArgs.vlqmode] = str(runArgs.gamma)
-        paramdict['k'+runArgs.vlqmode.lower()+chiralityIndex.lower()+'w']['K' + runArgs.vlqmode + chiralityIndex + '3'] = str(runArgs.kw)
+        block_w = 'k'+runArgs.vlqmode.lower()+chiralityIndex.lower()+'w'
+        paramdict[block_w]['K' + runArgs.vlqmode + chiralityIndex + '1'] = set_to_zero_string
+        paramdict[block_w]['K' + runArgs.vlqmode + chiralityIndex + '2'] = set_to_zero_string
+        paramdict[block_w]['K' + runArgs.vlqmode + chiralityIndex + '3'] = str(runArgs.kw)
+
+        # set all other entries to zero
+        for block in (all_blocks_xy.difference([block_w])):
+            for var in all_vars_xy:
+                if block.lower().replace('w', '') not in var.lower(): continue
+                paramdict[block][var] = set_to_zero_string
+        for block in (all_blocks_tb):
+            for var in all_vars_tb:
+                if block.lower() not in var.lower(): continue
+                paramdict[block][var] = set_to_zero_string
+
     else:
         paramdict['mass']['M' + runArgs.vlqmode + 'P'] = str(runArgs.mass)
         paramdict['decay']['W' + runArgs.vlqmode + 'P'] = str(runArgs.gamma)
-        paramdict['k'+runArgs.vlqmode.lower()+chiralityIndex.lower()+'w']['K' + runArgs.vlqmode + chiralityIndex + 'w3'] = str(runArgs.kw)
-        paramdict['k'+runArgs.vlqmode.lower()+chiralityIndex.lower()+'z']['K' + runArgs.vlqmode + chiralityIndex + 'z3'] = str(runArgs.kz)
-        paramdict['k'+runArgs.vlqmode.lower()+chiralityIndex.lower()+'h']['K' + runArgs.vlqmode + chiralityIndex + 'h3'] = str(runArgs.kh)
+        block_w = 'k'+runArgs.vlqmode.lower()+chiralityIndex.lower()+'w'
+        block_z = 'k'+runArgs.vlqmode.lower()+chiralityIndex.lower()+'z'
+        block_h = 'k'+runArgs.vlqmode.lower()+chiralityIndex.lower()+'h'
+        paramdict[block_w]['K' + runArgs.vlqmode + chiralityIndex + 'w1'] = set_to_zero_string
+        paramdict[block_w]['K' + runArgs.vlqmode + chiralityIndex + 'w2'] = set_to_zero_string
+        paramdict[block_w]['K' + runArgs.vlqmode + chiralityIndex + 'w3'] = str(runArgs.kw)
+        paramdict[block_z]['K' + runArgs.vlqmode + chiralityIndex + 'z1'] = set_to_zero_string
+        paramdict[block_z]['K' + runArgs.vlqmode + chiralityIndex + 'z2'] = set_to_zero_string
+        paramdict[block_z]['K' + runArgs.vlqmode + chiralityIndex + 'z3'] = str(runArgs.kz)
+        paramdict[block_h]['K' + runArgs.vlqmode + chiralityIndex + 'h1'] = set_to_zero_string
+        paramdict[block_h]['K' + runArgs.vlqmode + chiralityIndex + 'h2'] = set_to_zero_string
+        paramdict[block_h]['K' + runArgs.vlqmode + chiralityIndex + 'h3'] = str(runArgs.kh)
 
-    # TODO: add some logic based on sets to identify the values not changed and set their values to zero
+        # set all other entries to zero
+        for block in (all_blocks_xy):
+            for var in all_vars_xy:
+                if block.lower().replace('w', '') not in var.lower(): continue
+                paramdict[block][var] = set_to_zero_string
+        for block in (all_blocks_tb.difference([block_w, block_z, block_h])):
+            for var in all_vars_tb:
+                if block.lower() not in var.lower(): continue
+                paramdict[block][var] = set_to_zero_string
 
     return paramdict
 
@@ -495,15 +534,7 @@ process_fulldecay = processmaker('fulldecay')
 #### Process generation for full decay chain
 
 process_dir_fullDecay = new_process(process_fulldecay)
-
 modify_run_card(process_dir=process_dir_fullDecay, settings=extras)
-
-# paramcard_status, paramlist = paramcardmaker()
-# os.system('cp {new} {old} '.format(old=process_dir_fullDecay+'/Cards/param_card.dat', new='param_card.dat'))
-
-# if paramcard_status==False:
-#     print "ERROR: param_card could not be generated! Exiting"
-#     sys.exit(2)
 
 params = paramdictmaker()
 modify_param_card(process_dir=process_dir_fullDecay, params=params)
@@ -512,13 +543,11 @@ modify_param_card(process_dir=process_dir_fullDecay, params=params)
 #### Generate events with full decay
 generate(process_dir=process_dir_fullDecay, runArgs=runArgs)
 
-
 if os.path.exists(process_dir_fullDecay + '/Events/' + runName + '/unweighted_events.lhe.gz') == False\
    and os.path.exists(process_dir_fullDecay + '/Events/' + runName + '/unweighted_events.lhe') == False:
 
     print "ERROR: Event Generation with full decay chain failed. Aborting!"
     sys.exit(2)
-
 
 arrange_output(process_dir=process_dir_fullDecay, runArgs=runArgs, lhe_version=3, saveProcDir=True)
 
