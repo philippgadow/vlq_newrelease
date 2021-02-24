@@ -271,6 +271,14 @@ extras = { 'nevents': evgenConfig.nEventsPerJob * SAFE_FACTOR,
            'etaa'          :  -1.0,
 }
 
+# MadGraph PDF base fragment
+import MadGraphControl.MadGraphUtils
+MadGraphControl.MadGraphUtils.MADGRAPH_PDFSETTING={
+    'central_pdf':263400, # the lhapf id of the central pdf, see https://lhapdf.hepforge.org/pdfsets
+    'pdf_variations':[263400], # pdfs for which all variations (error sets) will be included as weights
+    'alternative_pdfs':[262400,13202], # pdfs for which only the central set will be included as weights
+    'scale_variations':[0.5,1.,2.], # variations of muR and muF wrt the central scale, all combinations of muF and muR will be evaluated
+}
 
 #### Find the process details from top level JobOption
 
