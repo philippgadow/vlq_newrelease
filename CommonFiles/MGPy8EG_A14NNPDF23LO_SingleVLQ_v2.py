@@ -1,20 +1,26 @@
 from MadGraphControl.MadGraphUtils import *
+
 import re
 import subprocess
 import sys
+import shutil
 
+# event configuration
+evgenConfig.nEventsPerJob = 10000
+
+# get additional python modules
 get_vlqcoupling = subprocess.Popen(['get_files', '-jo', 'VLQCouplingCalculator.py'])
 if get_vlqcoupling.wait():
     print "Could not copy VLQCouplingCalculator.py"
     sys.exit(2)
 
-get_lhehacker = subprocess.Popen(['get_files', '-jo', 'lhe_hacker.py'])
+get_lhehacker = subprocess.Popen(['get_files', '-jo', 'lhe_hacker_v2.py'])
 if get_lhehacker.wait():
-    print "Could not copy lhe_hacker.py"
+    print "Could not copy lhe_hacker_v2.py"
     sys.exit(2)
 
 from VLQCouplingCalculator import *
-from lhe_hacker import *
+from lhe_hacker_v2 import *
 
 ################################################################################
 '''
@@ -178,7 +184,7 @@ DECAY 6000008 Auto # WY
 ##################################################################################
 
 #### Some Variables
-MAX_TRIAL = 50     ## Maximum number of trials allowed for failures in event generation or reweighting
+MAX_TRIAL = 1     ## Maximum number of trials allowed for failures in event generation or reweighting
 SAFE_FACTOR = 1.1  ## Number of events generated = SAFE_FACTOR * max_events
 runName='run_01'   ## Run name for event generation
 
@@ -243,13 +249,13 @@ all_VLQ_processes_mindecay = {
 
 #### Additional parameters to build the run card
 
-extras = { 'lhe_version'   : '3.0',
+extras = { 'nevents': evgenConfig.nEventsPerJob * SAFE_FACTOR,
+           'iseed': str(runArgs.randomSeed),
+           'xqcut': "0.",
+           'lhe_version'   : '3.0',
            'cut_decays'    : 'F',
-           'pdlabel'       : "'lhapdf'",
-           'lhaid'         : '263400',
            'bwcutoff'      : '10000',
            'event_norm'    : 'average',
-           'use_syst'      : 'False',
            'drjj'          :  -1.0,
            'drll'          :  -1.0,
            'draa'          :  -1.0,
@@ -261,9 +267,16 @@ extras = { 'lhe_version'   : '3.0',
            'etaa'          :  -1.0,
 }
 
-#### Allow running over all available PDF sets
+# MadGraph PDF base fragment
 
-os.environ['LHAPATH']=os.environ["LHAPDF_DATA_PATH"]=(os.environ['LHAPATH'].split(':')[0])+":/cvmfs/sft.cern.ch/lcg/external/lhapdfsets/current/"
+import MadGraphControl.MadGraphUtils
+MadGraphControl.MadGraphUtils.MADGRAPH_PDFSETTING={
+    'central_pdf':263400, # the lhapf id of the central pdf, see https://lhapdf.hepforge.org/pdfsets
+    'pdf_variations':[263400], # pdfs for which all variations (error sets) will be included as weights
+    'alternative_pdfs':[262400,13202], # pdfs for which only the central set will be included as weights
+    'scale_variations':[0.5,1.,2.], # variations of muR and muF wrt the central scale, all combinations of muF and muR will be evaluated
+    # 'use_syst': "False", # use this and comment the previous ones if systematic variations are not needed
+}
 
 #### Find the process details from top level JobOption
 
@@ -282,6 +295,7 @@ def findprocdetails():
            _sigonly -> allows event generation for particles only
            _sigbaronly -> allows event generation for anti-particles only
            _norwt -> Reweighting is not applied
+           _hyy -> Higgs BR to photons 100%
     '''
 
     THIS_DIR = (os.environ['JOBOPTSEARCHPATH']).split(":")[0]
@@ -300,19 +314,21 @@ def findprocdetails():
     Mass = int(re.findall(r'\d+',re.findall(r'\d+' + chirality,jobname)[0])[0])*1.0
     Kappa = int(re.findall(r'\d+', jobname)[-1])*0.01
 
+
     if '_sigbaronly' in jobname: doSig, doSigbar = False, True
     elif '_sigonly'  in jobname: doSig, doSigbar = True,  False
     else: doSig, doSigbar = True, True
 
-    if '_norwt' in jobname: dorwt = False
-    else: dorwt = True
-    return VLQMode, ProdMode, DecayMode, process, chirality, Mass, Kappa, doSig, doSigbar, dorwt
+    dorwt = ('_norwt' not in jobname)
+    doHiggsyy = ('_hyy' in jobname)
+
+    return VLQMode, ProdMode, DecayMode, process, chirality, Mass, Kappa, doSig, doSigbar, dorwt, doHiggsyy
 
 
-## Creates the proc cards necessary. fcardmode = fulldecay or mindecay
+## Creates the process strings necessary for creating the process_dir. fcardmode = fulldecay or mindecay
 
-def fcardmaker(fcardname, fcardmode='fulldecay'):
-    if fcardmode == 'mindecay':
+def processmaker(processmode='fulldecay', runArgs=runArgs):
+    if processmode == 'mindecay':
         procmap_to_use = all_VLQ_processes_mindecay
     else:
         procmap_to_use = all_VLQ_processes_fulldecay
@@ -326,82 +342,101 @@ def fcardmaker(fcardname, fcardmode='fulldecay'):
     else:
         proc_to_use = ""
         for ii in range(len(this_procs)): proc_to_use += this_procs[ii].strip() + '\n'
-    fcard = open(fcardname,'w')
-    fcard.write('''
-import model /cvmfs/atlas.cern.ch/repo/sw/Generators/madgraph/models/latest/VLQ_v4_4FNS_UFO
-#import model /afs/cern.ch/work/a/avroy/public/VLQ_v4_4FNS_UFO
-define p = g u c d s u~ c~ d~ s~
-define j = g u c d s u~ c~ d~ s~
-define bb = b b~
-define WW = w+ w-
-define tt = t t~
-define ferm = ve vm vt ve~ vm~ vt~ mu- ta- e- mu+ ta+ e+ u c d s u~ c~ d~ s~
-define TPTP = tp tp~
-define BPBP = bp bp~
-define XX = x x~
-define YY = y y~
-%s
-output -f
-    '''%(proc_to_use))
-    fcard.close()
+    process = "import model /cvmfs/atlas.cern.ch/repo/sw/Generators/madgraph/models/latest/VLQ_v4_4FNS_UFO\n"
+    process += "define p = g u c d s u~ c~ d~ s~\n"
+    process += "define j = g u c d s u~ c~ d~ s~\n"
+    process += "define bb = b b~\n"
+    process += "define WW = w+ w-\n"
+    process += "define tt = t t~\n"
+    process += "define ferm = ve vm vt ve~ vm~ vt~ mu- ta- e- mu+ ta+ e+ u c d s u~ c~ d~ s~\n"
+    process += "define TPTP = tp tp~\n"
+    process += "define BPBP = bp bp~\n"
+    process += "define XX = x x~\n"
+    process += "define YY = y y~\n"
+    process += proc_to_use
+    process += "output -f"
+    return process
 
-
-#### Creates the param card based on the process details
+#### Creates the param card dictionary based on the process details
 #### Currently only assumes only third generation couplings
 
-def paramcardmaker():
+def paramdictmaker(runArgs=runArgs):
     chiralityIndex = runArgs.chirality.replace('H','')
-    all_vars = ["K"+a+b+c+d for a in ["T","B"] for b in ["L","R"] for c in ["w", "h", "z"] for d in ["1","2","3"]] + ["K"+a+b+d for a in ["Y","X"] for b in ["L","R"] for d in ["1","2","3"]]
+
+    all_blocks_xy = set(["k"+a+b+"w" for a in ["y","x"] for b in ["l","r"]])
+    all_vars_xy = set(["K"+a+b+d for a in ["Y","X"] for b in ["L","R"] for d in ["1","2","3"]])
+
+    all_blocks_tb = set(["k"+a+b+c for a in ["t","b"] for b in ["l","r"] for c in ["w", "h", "z"]])
+    all_vars_tb = set(["K"+a+b+c+d for a in ["T","B"] for b in ["L","R"] for c in ["w", "h", "z"] for d in ["1","2","3"]])
+
+    all_blocks = all_blocks_xy.union(all_blocks_tb)
+
+    set_to_zero_string = "0.000000e+01"
+
+    paramdict = {}
+    for block in ['mass', 'decay'] + list(all_blocks):
+        paramdict[block] = {}
+
     if runArgs.vlqmode in ['X', 'Y']:
         vars_to_change = ['M' + runArgs.vlqmode,
                           'W' + runArgs.vlqmode,
                           'K' + runArgs.vlqmode + chiralityIndex + '3']
-        vals_to_change = [runArgs.mass, runArgs.gamma, runArgs.kw]
+        paramdict['mass']['M' + runArgs.vlqmode] = str(runArgs.mass)
+        paramdict['decay']['W' + runArgs.vlqmode] = str(runArgs.gamma)
+        block_w = 'k'+runArgs.vlqmode.lower()+chiralityIndex.lower()+'w'
+        paramdict[block_w]['K' + runArgs.vlqmode + chiralityIndex + '1'] = set_to_zero_string
+        paramdict[block_w]['K' + runArgs.vlqmode + chiralityIndex + '2'] = set_to_zero_string
+        paramdict[block_w]['K' + runArgs.vlqmode + chiralityIndex + '3'] = str(runArgs.kw)
+
+        # set all other entries to zero
+        for block in (all_blocks_xy.difference([block_w])):
+            for var in all_vars_xy:
+                if block.lower().replace('w', '') not in var.lower(): continue
+                paramdict[block][var] = set_to_zero_string
+        for block in (all_blocks_tb):
+            for var in all_vars_tb:
+                if block.lower() not in var.lower(): continue
+                paramdict[block][var] = set_to_zero_string
+
     else:
         vars_to_change = ['M' + runArgs.vlqmode + 'P',
                           'W' + runArgs.vlqmode + 'P',
                           'K' + runArgs.vlqmode + chiralityIndex + 'w3',
                           'K' + runArgs.vlqmode + chiralityIndex + 'z3',
                           'K' + runArgs.vlqmode + chiralityIndex + 'h3']
-        vals_to_change = [runArgs.mass, runArgs.gamma, runArgs.kw, runArgs.kz, runArgs.kh]
+        paramdict['mass']['M' + runArgs.vlqmode + 'P'] = str(runArgs.mass)
+        paramdict['decay']['W' + runArgs.vlqmode + 'P'] = str(runArgs.gamma)
+        block_w = 'k'+runArgs.vlqmode.lower()+chiralityIndex.lower()+'w'
+        block_z = 'k'+runArgs.vlqmode.lower()+chiralityIndex.lower()+'z'
+        block_h = 'k'+runArgs.vlqmode.lower()+chiralityIndex.lower()+'h'
+        paramdict[block_w]['K' + runArgs.vlqmode + chiralityIndex + 'w1'] = set_to_zero_string
+        paramdict[block_w]['K' + runArgs.vlqmode + chiralityIndex + 'w2'] = set_to_zero_string
+        paramdict[block_w]['K' + runArgs.vlqmode + chiralityIndex + 'w3'] = str(runArgs.kw)
+        paramdict[block_z]['K' + runArgs.vlqmode + chiralityIndex + 'z1'] = set_to_zero_string
+        paramdict[block_z]['K' + runArgs.vlqmode + chiralityIndex + 'z2'] = set_to_zero_string
+        paramdict[block_z]['K' + runArgs.vlqmode + chiralityIndex + 'z3'] = str(runArgs.kz)
+        paramdict[block_h]['K' + runArgs.vlqmode + chiralityIndex + 'h1'] = set_to_zero_string
+        paramdict[block_h]['K' + runArgs.vlqmode + chiralityIndex + 'h2'] = set_to_zero_string
+        paramdict[block_h]['K' + runArgs.vlqmode + chiralityIndex + 'h3'] = str(runArgs.kh)
 
-    if not os.access(process_dir_fullDecay+'/Cards/param_card.dat',os.R_OK):
-        print 'ERROR: Could not get param card'
-        return False, []
-    elif os.access('param_card.dat',os.R_OK):
-        print 'ERROR: Old run card in the current directory.  Dont want to clobber it.  Please move it first.'
-        return False, []
+        # set all other entries to zero
+        for block in (all_blocks_xy):
+            for var in all_vars_xy:
+                if block.lower().replace('w', '') not in var.lower(): continue
+                paramdict[block][var] = set_to_zero_string
+        for block in (all_blocks_tb.difference([block_w, block_z, block_h])):
+            for var in all_vars_tb:
+                if block.lower() not in var.lower(): continue
+                paramdict[block][var] = set_to_zero_string
 
-    oldcard = open(process_dir_fullDecay+'/Cards/param_card.dat','r')
-    newcard = open('param_card.dat','w')
-
-    for line in oldcard:
-        madeChange = False
-        for var in all_vars:
-            if '# ' + var in line and var not in vars_to_change:
-                lineargs = line.strip().split()
-                lineargs[-3] = "0.00000e+01"
-                newcard.write(' '.join(lineargs) + '\n')
-                madeChange = True
-                break
-        for ii in range(len(vars_to_change)):
-            if '# ' + vars_to_change[ii] in line and not madeChange:
-                lineargs = line.strip().split()
-                lineargs[-3] = str(vals_to_change[ii])
-                newcard.write(' '.join(lineargs) + '\n')
-                madeChange = True
-                break
-        if not madeChange: newcard.write(line.strip() + '\n')
-    oldcard.close()
-    newcard.close()
-    return True, vars_to_change
+    return paramdict, vars_to_change
 
 #### makes a reweight card based for an input choice of mass and coupling grid
 
-def rewtcardmaker(ms, Ks):
+def rewtcardmaker(ms, Ks, paramlist, process_dir):
     tagnames = []
     launch_line = "launch --rwgt_name="
-    f = open("reweight_card.dat", "w")
+    f = open(process_dir + "/Cards/reweight_card.dat", "w")
     for m in ms:
         for K in Ks:
             tagname = ('M' + str(int(m/100)) + 'K{0:03d}').format(int(K*100))
@@ -426,12 +461,7 @@ def rewtcardmaker(ms, Ks):
 
 runArgs.vlqmode, runArgs.prodmode, runArgs.decaymode, \
 runArgs.vlqprocess, runArgs.chirality, runArgs.mass, \
-runArgs.kappa, runArgs.dosig, runArgs.dosigbar, runArgs.dorwt = findprocdetails()
-
-if hasattr(runArgs,'ecmEnergy'):
-    beamEnergy = runArgs.ecmEnergy / 2.
-else:
-    beamEnergy = 6500.
+runArgs.kappa, runArgs.dosig, runArgs.dosigbar, runArgs.dorwt, runArgs.doHiggsyy = findprocdetails()
 
 M_grid = [runArgs.mass-100., runArgs.mass] ## Mass grid for reweighting
 K_grid = [0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6] ## Kappa grid for reweighting
@@ -457,56 +487,22 @@ print ("Kappa: ", runArgs.kappa)
 print ("Process:  ", runArgs.vlqprocess)
 
 
-#### Make the proc cards for full decay and min decay
+#### Process and event generation for full decay chain
 
-fcardmaker('proc_card_mg5_minDecay.dat',  'mindecay')
-fcardmaker('proc_card_mg5_fullDecay.dat', 'fulldecay')
+process_dir_fullDecay = new_process(processmaker('fulldecay', runArgs))
+modify_run_card(process_dir=process_dir_fullDecay, settings=extras)
+paramdict, paramlist = paramdictmaker(runArgs)
+modify_param_card(process_dir=process_dir_fullDecay, params={k:v for (k,v) in paramdict.items()})
+MadGraphControl.MadGraphUtils.MADGRAPH_RUN_NAME = runName + "_fullDecay"
+generate(process_dir=process_dir_fullDecay, runArgs=runArgs)
 
-#### Process generation for full decay chain
-
-process_dir_fullDecay = new_process(card_loc = 'proc_card_mg5_fullDecay.dat')
-
-build_run_card(run_card_old = get_default_runcard(proc_dir = process_dir_fullDecay),
-               run_card_new = 'run_card.dat',
-               nevts        = runArgs.maxEvents * SAFE_FACTOR,
-               rand_seed    = runArgs.randomSeed,
-               beamEnergy   = beamEnergy,
-               xqcut        = 0.,
-               extras       = extras)
-
-paramcard_status, paramlist = paramcardmaker()
-
-if paramcard_status==False:
-    print "ERROR: param_card could not be generated! Exiting"
-    sys.exit(2)
-
-
-#### Generate events with full decay
-
-trial_count = 0
-
-while os.path.exists(process_dir_fullDecay + '/Events/' + runName + '_fullDecay/unweighted_events.lhe.gz') == False \
-      and os.path.exists(process_dir_fullDecay + '/Events/' + runName + '_fullDecay/unweighted_events.lhe') == False \
-      and trial_count < MAX_TRIAL:
-
-    generate(run_card_loc   =   './run_card.dat',
-             param_card_loc =   './param_card.dat',
-             run_name       =   runName + '_fullDecay',
-             proc_dir       =   process_dir_fullDecay)
-    trial_count += 1
-
-
-if os.path.exists(process_dir_fullDecay + '/Events/' + runName + '_fullDecay/unweighted_events.lhe.gz') == False \
+if os.path.exists(process_dir_fullDecay + '/Events/' + runName + '_fullDecay/unweighted_events.lhe.gz') == False\
    and os.path.exists(process_dir_fullDecay + '/Events/' + runName + '_fullDecay/unweighted_events.lhe') == False:
 
     print "ERROR: Event Generation with full decay chain failed. Aborting!"
     sys.exit(2)
 
-
-arrange_output(run_name    = runName + '_fullDecay',
-               proc_dir    = process_dir_fullDecay,
-               outputDS    = runName + '_fullDecay._00001.events.tar.gz',
-               saveProcDir = True)
+arrange_output(process_dir=process_dir_fullDecay, runArgs=runArgs, lhe_version=3, saveProcDir=True)
 
 
 #### Start building the reweighting scenario
@@ -515,26 +511,15 @@ if runArgs.dorwt:
 
     print "Reweighting is enabled\n\n\n"
 
-    rewtcardmaker([runArgs.mass],[0.5]) #### Make A Dummy Reweight Card to be used for reweighting with minDecay event generation
+    #### Process and Event Generation with minimal Decay chain
 
-    #### Process Generation with minimal Decay chain
-
-    process_dir_minDecay = new_process(card_loc='proc_card_mg5_minDecay.dat')
-
-    #### Generate Events with minimal Decay chain
-
-    trial_count = 0
-
-    while os.path.exists(process_dir_minDecay + '/Events/' + runName + '_minDecay/unweighted_events.lhe') == False \
-          and os.path.exists(process_dir_minDecay + '/Events/' + runName + '_minDecay/unweighted_events.lhe.gz') == False \
-          and trial_count < MAX_TRIAL:
-
-        generate(run_card_loc      = './run_card.dat',
-                 param_card_loc    = './param_card.dat',
-                 reweight_card_loc = './reweight_card.dat',
-                 run_name          = runName + '_minDecay',
-                 proc_dir          = process_dir_minDecay)
-        trial_count += 1
+    process_dir_minDecay = new_process(processmaker('mindecay', runArgs))
+    modify_run_card(process_dir=process_dir_minDecay, settings=extras)
+    rewtcardmaker([runArgs.mass],[0.5], paramlist, process_dir_minDecay) #### Make A Dummy Reweight Card to be used for reweighting with minDecay event generation
+    paramdict, paramlist = paramdictmaker(runArgs)
+    modify_param_card(process_dir=process_dir_minDecay, params={k:v for (k,v) in paramdict.items()})
+    MadGraphControl.MadGraphUtils.MADGRAPH_RUN_NAME = runName + "_minDecay"
+    generate(process_dir=process_dir_minDecay, runArgs=runArgs)
 
     if os.path.exists(process_dir_minDecay + '/Events/' + runName + '_minDecay/unweighted_events.lhe') == False \
        and os.path.exists(process_dir_minDecay + '/Events/' + runName + '_minDecay/unweighted_events.lhe.gz') == False:
@@ -542,15 +527,12 @@ if runArgs.dorwt:
         print "ERROR: Event Generation with min decay chain failed. Aborting!"
         sys.exit(2)
 
-    arrange_output(run_name    = runName + '_minDecay',
-                   proc_dir    = process_dir_minDecay,
-                   outputDS    = runName + '_minDecay._00001.events.tar.gz',
-                   saveProcDir = True)
+    arrange_output(process_dir=process_dir_minDecay, runArgs=runArgs, lhe_version=3, saveProcDir=True)
 
-    hack_status = lhe_hacker(lhe_minDecay  = process_dir_minDecay + '/Events/run_01_minDecay/unweighted_events.lhe',
-                        lhe_fullDecay = process_dir_fullDecay + '/Events/run_01_fullDecay/unweighted_events.lhe',
-                        vlq           = runArgs.vlqmode,
-                        decay         = runArgs.decaymode)
+    hack_status = lhe_hacker(lhe_minDecay  = process_dir_minDecay + '/Events/' + runName + '_minDecay/unweighted_events.lhe',
+                             lhe_fullDecay = process_dir_fullDecay + '/Events/' + runName + '_fullDecay/unweighted_events.lhe',
+                             vlq           = runArgs.vlqmode,
+                             decay         = runArgs.decaymode)
 
     if hack_status :
         print " \n\n\n LHE Hacker was successful \n\n\n"
@@ -576,7 +558,7 @@ if hack_status and runArgs.dorwt:
     print "Starting Reweighting Sequence\n\n"
     subprocess.call('mkdir -p ' + process_dir_minDecay+'/Events/run_RWT/', shell=True)
     subprocess.call('cp unweighted_events.lhe ' + process_dir_minDecay+'/Events/run_RWT/', shell=True)
-    tagnames = rewtcardmaker(M_grid, K_grid)
+    tagnames = rewtcardmaker(M_grid, K_grid, paramlist, process_dir_minDecay)
     did_it_work = False
     trial_count = 0
     while not did_it_work and trial_count < MAX_TRIAL:
@@ -593,6 +575,7 @@ if hack_status and runArgs.dorwt:
             print "did not find gzipped file. Already unzipped?"
             pass
         for tagname in tagnames:
+            did_it_work = False
             thisfile = open(process_dir_minDecay + '/Events/run_RWT/unweighted_events.lhe' , 'r')
             for line in thisfile:
                 if "<weight id='" + tagname +"'" in line:
@@ -607,7 +590,7 @@ if hack_status and runArgs.dorwt:
                 break
         sys.stdout.flush()
 
-    placeback_status = placeback(lhe_fullDecay  = process_dir_fullDecay + '/Events/run_01_fullDecay/unweighted_events.lhe',
+    placeback_status = placeback(lhe_fullDecay  = process_dir_fullDecay + '/Events/' + runName + '_fullDecay/unweighted_events.lhe',
                                  lhe_reweighted = process_dir_minDecay  + '/Events/run_RWT/unweighted_events.lhe')
     if placeback_status:
         print "Placeback Successful.\n\n\n"
@@ -615,7 +598,6 @@ if hack_status and runArgs.dorwt:
     else:
         print "Placeback Unsuccessful.\n\n\n"
         sys.exit(2)
-
 if hack_status and placeback_status:
     runArgs.inputGeneratorFile = 'final_events.events.tar.gz'
 else:
@@ -627,19 +609,13 @@ include("Pythia8_i/Pythia8_MadGraph.py")
 
 # following example from
 # https://gitlab.cern.ch/atlas-physics/pmg/infrastructure/mc15joboptions/-/blob/master/common/MadGraph/MadGraphControl_MGPy8EvGen_NNPDF30LO_A14NNPDF23LO_VLBSingle.py#L175
-# set BR of H(yy) to 100%
+# set BR of H(yy) to 100% if job option name contains "_hyy"
 # turn off all h decays and then turn on only h->yy
-genSeq.Pythia8.Commands += ["25:onMode = off",
-                            "25:onIfMatch = 22 22"]
-
+if runArgs.doHiggsyy:
+    genSeq.Pythia8.Commands += ["25:onMode = off",
+                                "25:onIfMatch = 22 22"]
 
 evgenConfig.description = "MadGraph+Pythia8 production JO with NNPDF30LN and A15NNPDF23LO for VLQ single " + runArgs.vlqmode + " to " + runArgs.vlqprocess[2:] + " while produced via " + runArgs.prodmode
-
 evgenConfig.keywords = ["BSM", "BSMtop", "exotic"]
-
 evgenConfig.process = runArgs.vlqprocess
-
 evgenConfig.contact =  ['avik.roy@cern.ch, fschenck@cern.ch']
-
-evgenConfig.minevents = 5000
-

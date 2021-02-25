@@ -40,7 +40,7 @@ def adjust(_list, dE):
     e = e_0 + dE
     m2 = e**2 - (px**2 + py**2 + pz**2)
     if m2 < 0:
-        print "invariant mass is going to be imaginary"
+        print("invariant mass is going to be imaginary")
     mass = math.sqrt(m2)
     _list[9] = str(e)
     _list[10] = str(mass)
@@ -77,7 +77,7 @@ def particlemapper(_list):
     return particles
 
 def fix_list(particlelist, VLQMode, fermchild, bosonchild):
-    for ii in particlelist: print ii
+    #for ii in particlelist: print ii
     new_list = []
     new_list.append(particlelist[0])
     particles = particlemapper(particlelist)
@@ -177,7 +177,7 @@ def fix_list(particlelist, VLQMode, fermchild, bosonchild):
         this_list[12] = str(this_particle['spin'])
         new_list.append("  ".join(this_list) + "\n")
         
-    for ii in range(len(new_list)): print new_list[ii]
+    #for ii in range(len(new_list)): print new_list[ii]
     #sys.exit(1)
     return new_list
 
@@ -221,14 +221,14 @@ def lhe_hacker(lhe_minDecay='./events_MinimalDecay.lhe', lhe_fullDecay='./events
         if '.gz' not in mindecay: mindecay += '.gz'
         elif '.gz' in mindecay: mindecay = mindecay.replace('.gz','')
         if not os.path.exists(mindecay):
-            print "ERROR! lhe file with minimal decay not found. Refurbishing cannot be done"
+            print("ERROR! lhe file with minimal decay not found. Refurbishing cannot be done")
             return False
     
     if not os.path.exists(fulldecay):
         if '.gz' not in fulldecay: fulldecay += '.gz'
         elif '.gz' in fulldecay: fulldecay = fulldecay.replace('.gz','')
         if not os.path.exists(fulldecay):
-            print "ERROR! lhe file with full decay not found. Refurbishing cannot be done"
+            print("ERROR! lhe file with full decay not found. Refurbishing cannot be done")
             return False
 
     if '.gz' in fulldecay:
@@ -262,11 +262,22 @@ def lhe_hacker(lhe_minDecay='./events_MinimalDecay.lhe', lhe_fullDecay='./events
     while True:
         try:
             event_lines = []
+            mgrwt_lines = []
+            in_mgrwt_block = False
             while line:
                 if "</event>" in line:
                     break
+                #elif "</rwgt>" in line:
+                #    mgrwt_lines.append(line)
+                #    in_mgrwt_block = False
+                #    line = file_full.next()
                 elif "<event>" in line:
+                    in_mgrwt_block = False
                     file_final.write(line)
+                    line = file_full.next()
+                elif "<mgrwt>" in  line or in_mgrwt_block:
+                    in_mgrwt_block = True
+                    mgrwt_lines.append(line)
                     line = file_full.next()
                 else:
                     #print line
@@ -304,6 +315,8 @@ def lhe_hacker(lhe_minDecay='./events_MinimalDecay.lhe', lhe_fullDecay='./events
                 # else:
                 #     this_line_now = "  ".join(line_info) + '\n'
                 #     file_final.write(this_line_now)
+            for rwtline in mgrwt_lines:
+                file_final.write(rwtline)
             file_final.write("</event>\n")
             line = file_full.next()
         except StopIteration:
@@ -336,11 +349,11 @@ def placeback(lhe_fullDecay,lhe_reweighted):
         if '.gz' not in fulldecay: fulldecay += '.gz'
         elif '.gz' in fulldecay: fulldecay = fulldecay.replace('.gz','')
         if not os.path.exists(fulldecay):
-            print "ERROR! lhe file with full decay not found. Placeback cannot be done"
+            print("ERROR! lhe file with full decay not found. Placeback cannot be done")
             return False
     
     if not os.path.exists(reweighted):
-        print "ERROR! lhe file with reweighting not found. Placeback cannot be done"
+        print("ERROR! lhe file with reweighting not found. Placeback cannot be done")
         return False
 
     if '.gz' in reweighted:
@@ -365,7 +378,7 @@ def placeback(lhe_fullDecay,lhe_reweighted):
             break
 
     if not is_rwt_ok:
-        print "ERROR! Reweighted lhe exists but does not contain reweighting information. Reweighting probably failed"
+        print("ERROR! Reweighted lhe exists but does not contain reweighting information. Reweighting probably failed")
         return False
 
     rewtlhe.close()
@@ -383,7 +396,7 @@ def placeback(lhe_fullDecay,lhe_reweighted):
             if '<initrwgt>' not in line and not found_block:
                 continue
             else:
-                print line
+                #print line
                 found_block = True
                 initrwgt_block += line.strip() + '\n'
                 if "weight id" in line:
@@ -426,6 +439,9 @@ def placeback(lhe_fullDecay,lhe_reweighted):
                 newlhe.write(weight_info[evcount])
                 newlhe.write(line)
                 evcount += 1
+            elif '<rwgt>' in line or '</rwgt>' in line or '<wgt id=' in line:
+                #line = oldlhe.next()
+                continue
             else:
                 newlhe.write(line)
         except StopIteration:
@@ -436,3 +452,4 @@ def placeback(lhe_fullDecay,lhe_reweighted):
     oldlhe.close()
     rewtlhe.close()
     return True
+
