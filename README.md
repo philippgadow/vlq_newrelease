@@ -1,10 +1,14 @@
 ## Development of the VLQ job option for Atlas MC Generation releases 21.6.23 and later
 
+The reweighting module doesn't work properly in CC7 releases, therefore we use the most recent SL6 release, which is `21.2.48`.
+
 ### Run this example quickly
 
 ```
 git clone git@github.com:philippgadow/vlq_newrelease.git
-source setup.sh
+source setup_sl6.sh
+# now inside SL6 singularity container
+source setup_sl6.sh
 source run.sh
 ```
 

@@ -563,7 +563,6 @@ if hack_status and runArgs.dorwt:
     trial_count = 0
     while not did_it_work and trial_count < MAX_TRIAL:
         trial_count += 1
-        subprocess.call('cp reweight_card.dat ' + process_dir_minDecay+'/Cards/', shell=True)
         subprocess.call('export CC=gcc && ' + me_exec + ' script.txt', shell=True)
         reweight_now = subprocess.Popen([me_exec, ' script.txt'])
         reweight_now.wait()
