@@ -8,6 +8,6 @@ if [[ -z ${DSID} ]]; then
 fi
 
 cd workdir
-Gen_tf.py --ecmEnergy=13000. --firstEvent=1 --maxEvents=1 --randomSeed=1234 --jobConfig=${DSID} --outputEVNTFile=test_DSID_${DSID}.EVNT.root
+Gen_tf.py --ecmEnergy=13000. --firstEvent=1 --maxEvents=1 --randomSeed=1234 --jobConfig=${DSID} --runNumber=${DSID} --outputEVNTFile=test_DSID_${DSID}.EVNT.root
 cd -
 ls workdir
