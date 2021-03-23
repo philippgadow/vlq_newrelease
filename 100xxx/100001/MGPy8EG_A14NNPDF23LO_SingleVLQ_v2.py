@@ -599,8 +599,6 @@ if hack_status and runArgs.dorwt:
         sys.exit(2)
 if hack_status and placeback_status:
     runArgs.inputGeneratorFile = 'final_events.events.tar.gz'
-else:
-    runArgs.inputGeneratorFile = runName+'_fullDecay._00001.events.tar.gz'
 
 
 include("Pythia8_i/Pythia8_A14_NNPDF23LO_EvtGen_Common.py")
