@@ -3,7 +3,7 @@
 
 ### Run this example quickly
 
-Run in release `21.6.58` (CC7)
+Run in release `21.6.58` (CC7)  (note: for t-channel validation, `101xxx`, use `21.6.57` for consistency with checks of others)
 
 ```
 git clone git@github.com:philippgadow/vlq_newrelease.git
@@ -29,7 +29,7 @@ All other job options are symlinks to this file.
 
 ### DSID logbook
 
-#### nominal samples
+#### nominal samples (with reweighting)
 
 | ------ | -------------- | ---- | -------- | -------- |
 | DSID   | mode           | mass | coupling | reweight |
@@ -93,4 +93,61 @@ All other job options are symlinks to this file.
 | 100119 | ZBHb (sigonly) | 1400 | 1.6      | no       |
 | 100120 | ZBHb (sigbar)  | 1400 | 1.6      | no       |
 | 100121 | WBHb (sig)     | 1400 | 1.6      | no       |
+| ------ | -------------- | ---- | -------- | -------- |
+
+
+
+### validation of WBHb and ZBHb job options with t-channel processes
+
+NOTE: use release 21.6.57 for these to be consistent with Avik Roy's setup!
+
+#### nominal samples
+
+| ------ | -------------- | ---- | -------- | -------- |
+| DSID   | mode           | mass | coupling | reweight |
+| ------ | -------------- | ---- | -------- | -------- |
+| 101000 | ZBHb (sigonly) | 1000 | 1.0      | yes      |
+| 101001 | ZBHb (sigbar)  | 1000 | 1.0      | yes      |
+| 101002 | WBHb (sig)     | 1000 | 1.0      | yes      |
+| 101003 | ZBHb (sigonly) | 1400 | 1.0      | yes      |
+| 101004 | ZBHb (sigbar)  | 1400 | 1.0      | yes      |
+| 101005 | WBHb (sig)     | 1400 | 1.0      | yes      |
+| 101006 | ZBHb (sigonly) | 2000 | 1.0      | yes      |
+| 101007 | ZBHb (sigbar)  | 2000 | 1.0      | yes      |
+| 101008 | WBHb (sig)     | 2000 | 1.0      | yes      |
+| ------ | -------------- | ---- | -------- | -------- |
+
+#### mass closure test
+
+| ------ | -------------- | ---- | -------- | -------- |
+| DSID   | mode           | mass | coupling | reweight |
+| ------ | -------------- | ---- | -------- | -------- |
+| 101100 | ZBHb (sigonly) |  900 | 1.0      | no       |
+| 101101 | ZBHb (sigbar)  |  900 | 1.0      | no       |
+| 101102 | WBHb (sig)     |  900 | 1.0      | no       |
+| 101103 | ZBHb (sigonly) | 1300 | 1.0      | no       |
+| 101104 | ZBHb (sigbar)  | 1300 | 1.0      | no       |
+| 101105 | WBHb (sig)     | 1300 | 1.0      | no       |
+| 101106 | ZBHb (sigonly) | 1900 | 1.0      | no       |
+| 101107 | ZBHb (sigbar)  | 1900 | 1.0      | no       |
+| 101108 | WBHb (sig)     | 1900 | 1.0      | no       |
+| ------ | -------------- | ---- | -------- | -------- |
+
+#### coupling closure test
+
+| ------ | -------------- | ---- | -------- | -------- |
+| DSID   | mode           | mass | coupling | reweight |
+| ------ | -------------- | ---- | -------- | -------- |
+| 101110 | ZBHb (sigonly) | 1400 | 0.1      | no       |
+| 101111 | ZBHb (sigbar)  | 1400 | 0.1      | no       |
+| 101112 | WBHb (sig)     | 1400 | 0.1      | no       |
+| 101113 | ZBHb (sigonly) | 1400 | 0.4      | no       |
+| 101114 | ZBHb (sigbar)  | 1400 | 0.4      | no       |
+| 101115 | WBHb (sig)     | 1400 | 0.4      | no       |
+| 101116 | ZBHb (sigonly) | 1400 | 1.3      | no       |
+| 101117 | ZBHb (sigbar)  | 1400 | 1.3      | no       |
+| 101118 | WBHb (sig)     | 1400 | 1.3      | no       |
+| 101119 | ZBHb (sigonly) | 1400 | 1.6      | no       |
+| 101120 | ZBHb (sigbar)  | 1400 | 1.6      | no       |
+| 101121 | WBHb (sig)     | 1400 | 1.6      | no       |
 | ------ | -------------- | ---- | -------- | -------- |
