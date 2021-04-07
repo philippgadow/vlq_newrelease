@@ -96,8 +96,74 @@ All other job options are symlinks to this file.
 | ------ | -------------- | ---- | -------- | -------- |
 
 
-
 ### validation of WBHb and ZBHb job options with t-channel processes
+
+NOTE: use release 21.6.57 for these to be consistent with Avik Roy's setup!
+
+#### nominal samples
+
+| ------ | -------------- | ---- | -------- | -------- |
+| DSID   | mode           | mass | coupling | reweight |
+| ------ | -------------- | ---- | -------- | -------- |
+| 102000 | ZBHb (sig)     | 1000 | 0.4      | yes      |
+| 102001 | ZBHb (sig)     | 1000 | 1.0      | yes      |
+| 102002 | WBHb (sig)     | 1000 | 0.4      | yes      |
+| 102003 | WBHb (sig)     | 1000 | 1.0      | yes      |
+| 102004 | ZBHb (sig)     | 1400 | 0.4      | yes      |
+| 102005 | ZBHb (sig)     | 1400 | 1.0      | yes      |
+| 102006 | WBHb (sig)     | 1400 | 0.4      | yes      |
+| 102007 | WBHb (sig)     | 1400 | 1.0      | yes      |
+| 102008 | ZBHb (sig)     | 2000 | 0.4      | yes      |
+| 102009 | ZBHb (sig)     | 2000 | 1.0      | yes      |
+| 102010 | WBHb (sig)     | 2000 | 0.4      | yes      |
+| 102011 | WBHb (sig)     | 2000 | 1.0      | yes      |
+| ------ | -------------- | ---- | -------- | -------- |
+
+#### mass closure test
+
+| ------ | -------------- | ---- | -------- | -------- |
+| DSID   | mode           | mass | coupling | reweight |
+| ------ | -------------- | ---- | -------- | -------- |
+| 102100 | ZBHb (sig)     |  900 | 0.4      | no       |
+| 102101 | ZBHb (sig)     |  900 | 1.0      | no       |
+| 102102 | WBHb (sig)     |  900 | 0.4      | no       |
+| 102103 | WBHb (sig)     |  900 | 1.0      | no       |
+| 102104 | ZBHb (sig)     | 1300 | 0.4      | no       |
+| 102105 | ZBHb (sig)     | 1300 | 1.0      | no       |
+| 102106 | WBHb (sig)     | 1300 | 0.4      | no       |
+| 102107 | WBHb (sig)     | 1300 | 1.0      | no       |
+| 102108 | ZBHb (sig)     | 1900 | 0.4      | no       |
+| 102109 | ZBHb (sig)     | 1900 | 1.0      | no       |
+| 102110 | WBHb (sig)     | 1900 | 0.4      | no       |
+| 102111 | WBHb (sig)     | 1900 | 1.0      | no       |
+| ------ | -------------- | ---- | -------- | -------- |
+
+#### coupling closure test
+
+| ------ | -------------- | ---- | -------- | -------- |
+| DSID   | mode           | mass | coupling | reweight |
+| ------ | -------------- | ---- | -------- | -------- |
+| 102200 | ZBHb (sig)     | 1400 | 0.1      | no       |
+| 102201 | WBHb (sig)     | 1400 | 0.1      | no       |
+| 102202 | ZBHb (sig)     | 1400 | 0.2      | no       |
+| 102203 | WBHb (sig)     | 1400 | 0.2      | no       |
+| 102204 | ZBHb (sig)     | 1400 | 0.3      | no       |
+| 102205 | WBHb (sig)     | 1400 | 0.3      | no       |
+| 102206 | ZBHb (sig)     | 1400 | 0.5      | no       |
+| 102207 | WBHb (sig)     | 1400 | 0.5      | no       |
+| 102208 | ZBHb (sig)     | 1400 | 0.7      | no       |
+| 102209 | WBHb (sig)     | 1400 | 0.7      | no       |
+| 102210 | ZBHb (sig)     | 1400 | 0.9      | no       |
+| 102211 | WBHb (sig)     | 1400 | 0.9      | no       |
+| 102212 | ZBHb (sig)     | 1400 | 1.1      | no       |
+| 102213 | WBHb (sig)     | 1400 | 1.1      | no       |
+| 102214 | ZBHb (sig)     | 1400 | 1.3      | no       |
+| 102215 | WBHb (sig)     | 1400 | 1.3      | no       |
+| ------ | -------------- | ---- | -------- | -------- |
+
+
+
+### validation of WBHb and ZBHb job options with t-channel processes (outdated)
 
 NOTE: use release 21.6.57 for these to be consistent with Avik Roy's setup!
 

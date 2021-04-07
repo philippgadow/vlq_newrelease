@@ -9,6 +9,7 @@ rm -rf workdir
 mkdir workdir
 cp -r 100xxx/* workdir/
 cp -r 101xxx/* workdir/
+cp -r 102xxx/* workdir/
 cd workdir
 asetup ${MYRELEASE}
 cd -
