@@ -440,11 +440,11 @@ def placeback(lhe_fullDecay,lhe_reweighted):
     rewtlhe = open(reweighted,'r')
 
     ## First create the <initrwgt> block from reweighted lhe
-
     initrwgt_block = ''
     found_block = False
     weight_tags = {}
     weight_tag_count = 0
+    
     while True:
         try:
             line = rewtlhe.next()
@@ -453,11 +453,21 @@ def placeback(lhe_fullDecay,lhe_reweighted):
             else:
                 #print line
                 found_block = True
-                initrwgt_block += line.strip() + '\n'
+                #initrwgt_block += line.strip() + '\n'
                 if "weight id" in line:
                     _tag = line.replace("'",'').split('=')[1].split('>')[0].strip()
                     weight_tags[weight_tag_count] = _tag
                     weight_tag_count += 1
+                    if 'set param_card' in line or (_tag.startswith("M") and (_tag[2] == "K" or _tag[3] == "K")) :
+                        initrwgt_block += "<weight id='{0}'> {0} </weight>".format(_tag) + "\n"
+                    else:
+                        initrwgt_block += line.strip() + '\n'
+                elif "set param_card" in line:
+                    continue
+                elif line.strip() == "</weight>":
+                    continue
+                else:
+                    initrwgt_block += line.strip() + '\n'
                 if '</initrwgt>' in line:
                     break
         except StopIteration:
@@ -482,11 +492,17 @@ def placeback(lhe_fullDecay,lhe_reweighted):
             break
 
     evcount = 0
-
+    in_initrwt_block = False
     while True:
         try:
             line = oldlhe.next()
-            if '<MGGenerationInfo>' in line:
+            if '<initrwgt>' in line:
+                in_initrwt_block = True
+                continue
+            elif '</initrwgt>' in line:
+                in_initrwt_block = False
+                continue
+            elif '<MGGenerationInfo>' in line:
                 newlhe.write(initrwgt_block)
                 newlhe.write(line)
             elif '</event>' in line:
@@ -494,7 +510,7 @@ def placeback(lhe_fullDecay,lhe_reweighted):
                 newlhe.write(weight_info[evcount])
                 newlhe.write(line)
                 evcount += 1
-            elif '<rwgt>' in line or '</rwgt>' in line or '<wgt id=' in line:
+            elif '<rwgt>' in line or '</rwgt>' in line or '<wgt id=' in line or in_initrwt_block:
                 #line = oldlhe.next()
                 continue
             else:

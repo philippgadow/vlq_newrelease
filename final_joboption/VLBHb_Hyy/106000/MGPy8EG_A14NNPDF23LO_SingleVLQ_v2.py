@@ -404,7 +404,7 @@ def rewtcardmaker(ms, Ks, process_dir):
     f = open(process_dir + "/Cards/reweight_card.dat", "w")
     for m in ms:
         for K in Ks:
-            tagname = ('M' + str(int(m/100)) + 'K{0:03d}').format(int(K*100))
+            tagname = 'M{:02d}K{:03d}'.format(int(m/100), int(K*100))
             tagnames.append(tagname)
             print tagname
             c = VLQCouplingCalculator(float(m), runArgs.vlqmode)
