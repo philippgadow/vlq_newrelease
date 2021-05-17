@@ -564,8 +564,12 @@ if hack_status and runArgs.dorwt:
                 break
         sys.stdout.flush()
 
-    placeback_status = placeback(lhe_fullDecay  = process_dir_fullDecay + '/Events/run_01_fullDecay/unweighted_events.lhe',
-                                 lhe_reweighted = process_dir_minDecay  + '/Events/run_RWT/unweighted_events.lhe')
+    if did_it_work:    
+        placeback_status = placeback(lhe_fullDecay  = process_dir_fullDecay + '/Events/run_01_fullDecay/unweighted_events.lhe',
+                                     lhe_reweighted = process_dir_minDecay  + '/Events/run_RWT/unweighted_events.lhe')
+    else:
+         placeback_status = False
+
     if placeback_status:
         print "Placeback Successful.\n\n\n"
         subprocess.call('tar -czf tmp_final_events.events.tar.gz tmp_final_events.events', shell=True)
