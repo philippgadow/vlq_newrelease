@@ -3,7 +3,7 @@
 
 ### Run this example quickly
 
-Run in release `21.6.58` (CC7)  (note: for t-channel validation, `101xxx`, use `21.6.57` for consistency with checks of others)
+Run in release `21.6.57` (CC7)
 
 ```
 git clone git@github.com:philippgadow/vlq_newrelease.git
@@ -11,27 +11,19 @@ source setup.sh
 source run.sh
 ```
 
-Run in release `21.6.48` (SL6)
-
-```
-git clone git@github.com:philippgadow/vlq_newrelease.git
-source setup_sl6.sh
-# now inside SL6 singularity container
-source setup_sl6.sh
-source run.sh
-```
 
 ### Modify job option
 
 Take the job option [`100xxx/100001/mc.MGPy8EG_ZBHb1000LH100_sigonly.py`](https://github.com/philippgadow/vlq_newrelease/blob/master/100xxx/100001/mc.MGPy8EG_ZBHb1000LH100_sigonly.py) to implement your changes for testing.
-All other job options are symlinks to this file.
+All other job options inside `100xxx` are symlinks to this file. Similar is true for the job options inside `101xxx` (and other directories), where only `101xxx/101000` will include the file and the other directories will point to it. Have a look at the logbook of DSIDs to identify the most recent version and those kept for documentation.
 
 
 ### DSID logbook
 
 #### VLB Hb nominal samples, including t-channel processes (with reweighting, LO PDF)
 
-| ------ | -------------- | ---- | -------- | -------- |
+These samples correspond to the final job options which were used to create simulated EVNT and AOD samples.
+
 | DSID   | mode           | mass | coupling | reweight |
 | ------ | -------------- | ---- | -------- | -------- |
 | 105000 | ZBHb (sig)     | 1000 | 0.4      | yes      |
@@ -66,12 +58,12 @@ All other job options are symlinks to this file.
 | 105029 | WBHb (sig)     | 2200 | 1.0      | yes      |
 | 105030 | WBHb (sig)     | 2400 | 0.4      | yes      |
 | 105031 | WBHb (sig)     | 2400 | 1.0      | yes      |
-| ------ | -------------- | ---- | -------- | -------- |
 
 
 #### VLB Hb(yy) nominal samples, including t-channel processes (with reweighting, LO PDF)
 
-| ------ | -------------- | ---- | -------- | -------- |
+These samples correspond to the final job options which were used to create simulated EVNT and AOD samples.
+
 | DSID   | mode           | mass | coupling | reweight |
 | ------ | -------------- | ---- | -------- | -------- |
 | 106000 | ZBH(yy)b (sig) | 1000 | 0.4      | yes      |
@@ -106,15 +98,12 @@ All other job options are symlinks to this file.
 | 106029 | WBH(yy)b (sig) | 2200 | 1.0      | yes      |
 | 106030 | WBH(yy)b (sig) | 2400 | 0.4      | yes      |
 | 106031 | WBH(yy)b (sig) | 2400 | 1.0      | yes      |
-| ------ | -------------- | ---- | -------- | -------- |
-
-
-
 
 
 #### VLB Hb nominal samples, including t-channel processes (with reweighting, NLO PDF)
 
-| ------ | -------------- | ---- | -------- | -------- |
+Outdated samples, kept for the sake of documentation: wrong PDF (should be LO PDF and not NLO PDF)
+
 | DSID   | mode           | mass | coupling | reweight |
 | ------ | -------------- | ---- | -------- | -------- |
 | 103000 | ZBHb (sig)     |  800 | 0.4      | yes      |
@@ -153,12 +142,12 @@ All other job options are symlinks to this file.
 | 103033 | WBHb (sig)     | 2200 | 1.0      | yes      |
 | 103034 | WBHb (sig)     | 2400 | 0.4      | yes      |
 | 103035 | WBHb (sig)     | 2400 | 1.0      | yes      |
-| ------ | -------------- | ---- | -------- | -------- |
 
 
 #### VLB Hb(yy) nominal samples, including t-channel processes (with reweighting, NLO PDF)
 
-| ------ | -------------- | ---- | -------- | -------- |
+Outdated samples, kept for the sake of documentation: wrong PDF (should be LO PDF and not NLO PDF)
+
 | DSID   | mode           | mass | coupling | reweight |
 | ------ | -------------- | ---- | -------- | -------- |
 | 104000 | ZBH(yy)b (sig) |  800 | 0.4      | yes      |
@@ -197,11 +186,10 @@ All other job options are symlinks to this file.
 | 104033 | WBH(yy)b (sig) | 2200 | 1.0      | yes      |
 | 104034 | WBH(yy)b (sig) | 2400 | 0.4      | yes      |
 | 104035 | WBH(yy)b (sig) | 2400 | 1.0      | yes      |
-| ------ | -------------- | ---- | -------- | -------- |
+
 
 #### nominal samples (with reweighting)
 
-| ------ | -------------- | ---- | -------- | -------- |
 | DSID   | mode           | mass | coupling | reweight |
 | ------ | -------------- | ---- | -------- | -------- |
 | 100001 | ZBHb (sigonly) | 1000 | 1.0      | yes      |
@@ -231,11 +219,10 @@ All other job options are symlinks to this file.
 | 100025 | ZBHb (sigonly) |  800 | 1.0      | yes      |
 | 100026 | ZBHb (sigbar)  |  800 | 1.0      | yes      |
 | 100027 | WBHb (sig)     |  800 | 1.0      | yes      |
-| ------ | -------------- | ---- | -------- | -------- |
 
 #### mass closure test
 
-| ------ | -------------- | ---- | -------- | -------- |
+
 | DSID   | mode           | mass | coupling | reweight |
 | ------ | -------------- | ---- | -------- | -------- |
 | 100100 | ZBHb (sigonly) | 1300 | 1.0      | no       |
@@ -244,11 +231,11 @@ All other job options are symlinks to this file.
 | 100103 | ZBHb (sigonly) | 1900 | 1.0      | no       |
 | 100104 | ZBHb (sigbar)  | 1900 | 1.0      | no       |
 | 100105 | WBHb (sig)     | 1900 | 1.0      | no       |
-| ------ | -------------- | ---- | -------- | -------- |
+
 
 #### coupling closure test
 
-| ------ | -------------- | ---- | -------- | -------- |
+
 | DSID   | mode           | mass | coupling | reweight |
 | ------ | -------------- | ---- | -------- | -------- |
 | 100110 | ZBHb (sigonly) | 1400 | 0.1      | no       |
@@ -263,7 +250,7 @@ All other job options are symlinks to this file.
 | 100119 | ZBHb (sigonly) | 1400 | 1.6      | no       |
 | 100120 | ZBHb (sigbar)  | 1400 | 1.6      | no       |
 | 100121 | WBHb (sig)     | 1400 | 1.6      | no       |
-| ------ | -------------- | ---- | -------- | -------- |
+
 
 
 ### validation of WBHb and ZBHb job options with t-channel processes
@@ -272,7 +259,7 @@ NOTE: use release 21.6.57 for these to be consistent with Avik Roy's setup!
 
 #### nominal samples
 
-| ------ | -------------- | ---- | -------- | -------- |
+
 | DSID   | mode           | mass | coupling | reweight |
 | ------ | -------------- | ---- | -------- | -------- |
 | 102000 | ZBHb (sig)     | 1000 | 0.4      | yes      |
@@ -287,11 +274,11 @@ NOTE: use release 21.6.57 for these to be consistent with Avik Roy's setup!
 | 102009 | ZBHb (sig)     | 2000 | 1.0      | yes      |
 | 102010 | WBHb (sig)     | 2000 | 0.4      | yes      |
 | 102011 | WBHb (sig)     | 2000 | 1.0      | yes      |
-| ------ | -------------- | ---- | -------- | -------- |
+
 
 #### mass closure test
 
-| ------ | -------------- | ---- | -------- | -------- |
+
 | DSID   | mode           | mass | coupling | reweight |
 | ------ | -------------- | ---- | -------- | -------- |
 | 102100 | ZBHb (sig)     |  900 | 0.4      | no       |
@@ -306,11 +293,11 @@ NOTE: use release 21.6.57 for these to be consistent with Avik Roy's setup!
 | 102109 | ZBHb (sig)     | 1900 | 1.0      | no       |
 | 102110 | WBHb (sig)     | 1900 | 0.4      | no       |
 | 102111 | WBHb (sig)     | 1900 | 1.0      | no       |
-| ------ | -------------- | ---- | -------- | -------- |
+
 
 #### coupling closure test
 
-| ------ | -------------- | ---- | -------- | -------- |
+
 | DSID   | mode           | mass | coupling | reweight |
 | ------ | -------------- | ---- | -------- | -------- |
 | 102200 | ZBHb (sig)     | 1400 | 0.1      | no       |
@@ -329,17 +316,15 @@ NOTE: use release 21.6.57 for these to be consistent with Avik Roy's setup!
 | 102213 | WBHb (sig)     | 1400 | 1.1      | no       |
 | 102214 | ZBHb (sig)     | 1400 | 1.3      | no       |
 | 102215 | WBHb (sig)     | 1400 | 1.3      | no       |
-| ------ | -------------- | ---- | -------- | -------- |
+
 
 
 
 ### validation of WBHb and ZBHb job options with t-channel processes (outdated)
 
-NOTE: use release 21.6.57 for these to be consistent with Avik Roy's setup!
-
 #### nominal samples
 
-| ------ | -------------- | ---- | -------- | -------- |
+
 | DSID   | mode           | mass | coupling | reweight |
 | ------ | -------------- | ---- | -------- | -------- |
 | 101000 | ZBHb (sigonly) | 1000 | 1.0      | yes      |
@@ -351,11 +336,10 @@ NOTE: use release 21.6.57 for these to be consistent with Avik Roy's setup!
 | 101006 | ZBHb (sigonly) | 2000 | 1.0      | yes      |
 | 101007 | ZBHb (sigbar)  | 2000 | 1.0      | yes      |
 | 101008 | WBHb (sig)     | 2000 | 1.0      | yes      |
-| ------ | -------------- | ---- | -------- | -------- |
+
 
 #### mass closure test
 
-| ------ | -------------- | ---- | -------- | -------- |
 | DSID   | mode           | mass | coupling | reweight |
 | ------ | -------------- | ---- | -------- | -------- |
 | 101100 | ZBHb (sigonly) |  900 | 1.0      | no       |
@@ -367,11 +351,10 @@ NOTE: use release 21.6.57 for these to be consistent with Avik Roy's setup!
 | 101106 | ZBHb (sigonly) | 1900 | 1.0      | no       |
 | 101107 | ZBHb (sigbar)  | 1900 | 1.0      | no       |
 | 101108 | WBHb (sig)     | 1900 | 1.0      | no       |
-| ------ | -------------- | ---- | -------- | -------- |
+
 
 #### coupling closure test
 
-| ------ | -------------- | ---- | -------- | -------- |
 | DSID   | mode           | mass | coupling | reweight |
 | ------ | -------------- | ---- | -------- | -------- |
 | 101110 | ZBHb (sigonly) | 1400 | 0.1      | no       |
@@ -386,4 +369,4 @@ NOTE: use release 21.6.57 for these to be consistent with Avik Roy's setup!
 | 101119 | ZBHb (sigonly) | 1400 | 1.6      | no       |
 | 101120 | ZBHb (sigbar)  | 1400 | 1.6      | no       |
 | 101121 | WBHb (sig)     | 1400 | 1.6      | no       |
-| ------ | -------------- | ---- | -------- | -------- |
+
