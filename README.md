@@ -26,38 +26,38 @@ These samples correspond to the final job options which were used to create simu
 
 | DSID   | mode           | mass | coupling | reweight |
 | ------ | -------------- | ---- | -------- | -------- |
-| 105000 | ZBHb (sig)     | 1000 | 0.4      | yes      |
-| 105001 | ZBHb (sig)     | 1000 | 1.0      | yes      |
-| 105002 | ZBHb (sig)     | 1200 | 0.4      | yes      |
-| 105003 | ZBHb (sig)     | 1200 | 1.0      | yes      |
-| 105004 | ZBHb (sig)     | 1400 | 0.4      | yes      |
-| 105005 | ZBHb (sig)     | 1400 | 1.0      | yes      |
-| 105006 | ZBHb (sig)     | 1600 | 0.4      | yes      |
-| 105007 | ZBHb (sig)     | 1600 | 1.0      | yes      |
-| 105008 | ZBHb (sig)     | 1800 | 0.4      | yes      |
-| 105009 | ZBHb (sig)     | 1800 | 1.0      | yes      |
-| 105010 | ZBHb (sig)     | 2000 | 0.4      | yes      |
-| 105011 | ZBHb (sig)     | 2000 | 1.0      | yes      |
-| 105012 | ZBHb (sig)     | 2200 | 0.4      | yes      |
-| 105013 | ZBHb (sig)     | 2200 | 1.0      | yes      |
-| 105014 | ZBHb (sig)     | 2400 | 0.4      | yes      |
-| 105015 | ZBHb (sig)     | 2400 | 1.0      | yes      |
-| 105016 | WBHb (sig)     | 1000 | 0.4      | yes      |
-| 105017 | WBHb (sig)     | 1000 | 1.0      | yes      |
-| 105018 | WBHb (sig)     | 1200 | 0.4      | yes      |
-| 105019 | WBHb (sig)     | 1200 | 1.0      | yes      |
-| 105020 | WBHb (sig)     | 1400 | 0.4      | yes      |
-| 105021 | WBHb (sig)     | 1400 | 1.0      | yes      |
-| 105022 | WBHb (sig)     | 1600 | 0.4      | yes      |
-| 105023 | WBHb (sig)     | 1600 | 1.0      | yes      |
-| 105024 | WBHb (sig)     | 1800 | 0.4      | yes      |
-| 105025 | WBHb (sig)     | 1800 | 1.0      | yes      |
-| 105026 | WBHb (sig)     | 2000 | 0.4      | yes      |
-| 105027 | WBHb (sig)     | 2000 | 1.0      | yes      |
-| 105028 | WBHb (sig)     | 2200 | 0.4      | yes      |
-| 105029 | WBHb (sig)     | 2200 | 1.0      | yes      |
-| 105030 | WBHb (sig)     | 2400 | 0.4      | yes      |
-| 105031 | WBHb (sig)     | 2400 | 1.0      | yes      |
+| 107000 | ZBHb (sig)     | 1000 | 0.4      | yes      |
+| 107001 | ZBHb (sig)     | 1000 | 1.0      | yes      |
+| 107002 | ZBHb (sig)     | 1200 | 0.4      | yes      |
+| 107003 | ZBHb (sig)     | 1200 | 1.0      | yes      |
+| 107004 | ZBHb (sig)     | 1400 | 0.4      | yes      |
+| 107005 | ZBHb (sig)     | 1400 | 1.0      | yes      |
+| 107006 | ZBHb (sig)     | 1600 | 0.4      | yes      |
+| 107007 | ZBHb (sig)     | 1600 | 1.0      | yes      |
+| 107008 | ZBHb (sig)     | 1800 | 0.4      | yes      |
+| 107009 | ZBHb (sig)     | 1800 | 1.0      | yes      |
+| 107010 | ZBHb (sig)     | 2000 | 0.4      | yes      |
+| 107011 | ZBHb (sig)     | 2000 | 1.0      | yes      |
+| 107012 | ZBHb (sig)     | 2200 | 0.4      | yes      |
+| 107013 | ZBHb (sig)     | 2200 | 1.0      | yes      |
+| 107014 | ZBHb (sig)     | 2400 | 0.4      | yes      |
+| 107015 | ZBHb (sig)     | 2400 | 1.0      | yes      |
+| 107016 | WBHb (sig)     | 1000 | 0.4      | yes      |
+| 107017 | WBHb (sig)     | 1000 | 1.0      | yes      |
+| 107018 | WBHb (sig)     | 1200 | 0.4      | yes      |
+| 107019 | WBHb (sig)     | 1200 | 1.0      | yes      |
+| 107020 | WBHb (sig)     | 1400 | 0.4      | yes      |
+| 107021 | WBHb (sig)     | 1400 | 1.0      | yes      |
+| 107022 | WBHb (sig)     | 1600 | 0.4      | yes      |
+| 107023 | WBHb (sig)     | 1600 | 1.0      | yes      |
+| 107024 | WBHb (sig)     | 1800 | 0.4      | yes      |
+| 107025 | WBHb (sig)     | 1800 | 1.0      | yes      |
+| 107026 | WBHb (sig)     | 2000 | 0.4      | yes      |
+| 107027 | WBHb (sig)     | 2000 | 1.0      | yes      |
+| 107028 | WBHb (sig)     | 2200 | 0.4      | yes      |
+| 107029 | WBHb (sig)     | 2200 | 1.0      | yes      |
+| 107030 | WBHb (sig)     | 2400 | 0.4      | yes      |
+| 107031 | WBHb (sig)     | 2400 | 1.0      | yes      |
 
 
 #### VLB Hb(yy) nominal samples, including t-channel processes (with reweighting, LO PDF)
@@ -66,38 +66,117 @@ These samples correspond to the final job options which were used to create simu
 
 | DSID   | mode           | mass | coupling | reweight |
 | ------ | -------------- | ---- | -------- | -------- |
-| 106000 | ZBH(yy)b (sig) | 1000 | 0.4      | yes      |
-| 106001 | ZBH(yy)b (sig) | 1000 | 1.0      | yes      |
-| 106002 | ZBH(yy)b (sig) | 1200 | 0.4      | yes      |
-| 106003 | ZBH(yy)b (sig) | 1200 | 1.0      | yes      |
-| 106004 | ZBH(yy)b (sig) | 1400 | 0.4      | yes      |
-| 106005 | ZBH(yy)b (sig) | 1400 | 1.0      | yes      |
-| 106006 | ZBH(yy)b (sig) | 1600 | 0.4      | yes      |
-| 106007 | ZBH(yy)b (sig) | 1600 | 1.0      | yes      |
-| 106008 | ZBH(yy)b (sig) | 1800 | 0.4      | yes      |
-| 106009 | ZBH(yy)b (sig) | 1800 | 1.0      | yes      |
-| 106010 | ZBH(yy)b (sig) | 2000 | 0.4      | yes      |
-| 106011 | ZBH(yy)b (sig) | 2000 | 1.0      | yes      |
-| 106012 | ZBH(yy)b (sig) | 2200 | 0.4      | yes      |
-| 106013 | ZBH(yy)b (sig) | 2200 | 1.0      | yes      |
-| 106014 | ZBH(yy)b (sig) | 2400 | 0.4      | yes      |
-| 106015 | ZBH(yy)b (sig) | 2400 | 1.0      | yes      |
-| 106016 | WBH(yy)b (sig) | 1000 | 0.4      | yes      |
-| 106017 | WBH(yy)b (sig) | 1000 | 1.0      | yes      |
-| 106018 | WBH(yy)b (sig) | 1200 | 0.4      | yes      |
-| 106019 | WBH(yy)b (sig) | 1200 | 1.0      | yes      |
-| 106020 | WBH(yy)b (sig) | 1400 | 0.4      | yes      |
-| 106021 | WBH(yy)b (sig) | 1400 | 1.0      | yes      |
-| 106022 | WBH(yy)b (sig) | 1600 | 0.4      | yes      |
-| 106023 | WBH(yy)b (sig) | 1600 | 1.0      | yes      |
-| 106024 | WBH(yy)b (sig) | 1800 | 0.4      | yes      |
-| 106025 | WBH(yy)b (sig) | 1800 | 1.0      | yes      |
-| 106026 | WBH(yy)b (sig) | 2000 | 0.4      | yes      |
-| 106027 | WBH(yy)b (sig) | 2000 | 1.0      | yes      |
-| 106028 | WBH(yy)b (sig) | 2200 | 0.4      | yes      |
-| 106029 | WBH(yy)b (sig) | 2200 | 1.0      | yes      |
-| 106030 | WBH(yy)b (sig) | 2400 | 0.4      | yes      |
-| 106031 | WBH(yy)b (sig) | 2400 | 1.0      | yes      |
+| 108000 | ZBH(yy)b (sig) | 1000 | 0.4      | yes      |
+| 108001 | ZBH(yy)b (sig) | 1000 | 1.0      | yes      |
+| 108002 | ZBH(yy)b (sig) | 1200 | 0.4      | yes      |
+| 108003 | ZBH(yy)b (sig) | 1200 | 1.0      | yes      |
+| 108004 | ZBH(yy)b (sig) | 1400 | 0.4      | yes      |
+| 108005 | ZBH(yy)b (sig) | 1400 | 1.0      | yes      |
+| 108006 | ZBH(yy)b (sig) | 1600 | 0.4      | yes      |
+| 108007 | ZBH(yy)b (sig) | 1600 | 1.0      | yes      |
+| 108008 | ZBH(yy)b (sig) | 1800 | 0.4      | yes      |
+| 108009 | ZBH(yy)b (sig) | 1800 | 1.0      | yes      |
+| 108010 | ZBH(yy)b (sig) | 2000 | 0.4      | yes      |
+| 108011 | ZBH(yy)b (sig) | 2000 | 1.0      | yes      |
+| 108012 | ZBH(yy)b (sig) | 2200 | 0.4      | yes      |
+| 108013 | ZBH(yy)b (sig) | 2200 | 1.0      | yes      |
+| 108014 | ZBH(yy)b (sig) | 2400 | 0.4      | yes      |
+| 108015 | ZBH(yy)b (sig) | 2400 | 1.0      | yes      |
+| 108016 | WBH(yy)b (sig) | 1000 | 0.4      | yes      |
+| 108017 | WBH(yy)b (sig) | 1000 | 1.0      | yes      |
+| 108018 | WBH(yy)b (sig) | 1200 | 0.4      | yes      |
+| 108019 | WBH(yy)b (sig) | 1200 | 1.0      | yes      |
+| 108020 | WBH(yy)b (sig) | 1400 | 0.4      | yes      |
+| 108021 | WBH(yy)b (sig) | 1400 | 1.0      | yes      |
+| 108022 | WBH(yy)b (sig) | 1600 | 0.4      | yes      |
+| 108023 | WBH(yy)b (sig) | 1600 | 1.0      | yes      |
+| 108024 | WBH(yy)b (sig) | 1800 | 0.4      | yes      |
+| 108025 | WBH(yy)b (sig) | 1800 | 1.0      | yes      |
+| 108026 | WBH(yy)b (sig) | 2000 | 0.4      | yes      |
+| 108027 | WBH(yy)b (sig) | 2000 | 1.0      | yes      |
+| 108028 | WBH(yy)b (sig) | 2200 | 0.4      | yes      |
+| 108029 | WBH(yy)b (sig) | 2200 | 1.0      | yes      |
+| 108030 | WBH(yy)b (sig) | 2400 | 0.4      | yes      |
+| 108031 | WBH(yy)b (sig) | 2400 | 1.0      | yes      |
+
+#### VLB Hb nominal samples, including t-channel processes (with reweighting, LO PDF)
+
+Buggy samples, the file name botched up the coupling strength.
+
+| DSID   | mode           | mass | coupling | reweight |
+| ------ | -------------- | ---- | -------- | -------- |
+| 105000 | ZBHb (sig)     | 1000 | 0.02     | yes      |
+| 105001 | ZBHb (sig)     | 1000 | 0.02     | yes      |
+| 105002 | ZBHb (sig)     | 1200 | 0.02     | yes      |
+| 105003 | ZBHb (sig)     | 1200 | 0.02     | yes      |
+| 105004 | ZBHb (sig)     | 1400 | 0.02     | yes      |
+| 105005 | ZBHb (sig)     | 1400 | 0.02     | yes      |
+| 105006 | ZBHb (sig)     | 1600 | 0.02     | yes      |
+| 105007 | ZBHb (sig)     | 1600 | 0.02     | yes      |
+| 105008 | ZBHb (sig)     | 1800 | 0.02     | yes      |
+| 105009 | ZBHb (sig)     | 1800 | 0.02     | yes      |
+| 105010 | ZBHb (sig)     | 2000 | 0.02     | yes      |
+| 105011 | ZBHb (sig)     | 2000 | 0.02     | yes      |
+| 105012 | ZBHb (sig)     | 2200 | 0.02     | yes      |
+| 105013 | ZBHb (sig)     | 2200 | 0.02     | yes      |
+| 105014 | ZBHb (sig)     | 2400 | 0.02     | yes      |
+| 105015 | ZBHb (sig)     | 2400 | 0.02     | yes      |
+| 105016 | WBHb (sig)     | 1000 | 0.02     | yes      |
+| 105017 | WBHb (sig)     | 1000 | 0.02     | yes      |
+| 105018 | WBHb (sig)     | 1200 | 0.02     | yes      |
+| 105019 | WBHb (sig)     | 1200 | 0.02     | yes      |
+| 105020 | WBHb (sig)     | 1400 | 0.02     | yes      |
+| 105021 | WBHb (sig)     | 1400 | 0.02     | yes      |
+| 105022 | WBHb (sig)     | 1600 | 0.02     | yes      |
+| 105023 | WBHb (sig)     | 1600 | 0.02     | yes      |
+| 105024 | WBHb (sig)     | 1800 | 0.02     | yes      |
+| 105025 | WBHb (sig)     | 1800 | 0.02     | yes      |
+| 105026 | WBHb (sig)     | 2000 | 0.02     | yes      |
+| 105027 | WBHb (sig)     | 2000 | 0.02     | yes      |
+| 105028 | WBHb (sig)     | 2200 | 0.02     | yes      |
+| 105029 | WBHb (sig)     | 2200 | 0.02     | yes      |
+| 105030 | WBHb (sig)     | 2400 | 0.02     | yes      |
+| 105031 | WBHb (sig)     | 2400 | 0.02     | yes      |
+
+
+#### VLB Hb(yy) nominal samples, including t-channel processes (with reweighting, LO PDF)
+
+Buggy samples, the file name botched up the coupling strength.
+
+| DSID   | mode           | mass | coupling | reweight |
+| ------ | -------------- | ---- | -------- | -------- |
+| 106000 | ZBH(yy)b (sig) | 1000 | 0.02     | yes      |
+| 106001 | ZBH(yy)b (sig) | 1000 | 0.02     | yes      |
+| 106002 | ZBH(yy)b (sig) | 1200 | 0.02     | yes      |
+| 106003 | ZBH(yy)b (sig) | 1200 | 0.02     | yes      |
+| 106004 | ZBH(yy)b (sig) | 1400 | 0.02     | yes      |
+| 106005 | ZBH(yy)b (sig) | 1400 | 0.02     | yes      |
+| 106006 | ZBH(yy)b (sig) | 1600 | 0.02     | yes      |
+| 106007 | ZBH(yy)b (sig) | 1600 | 0.02     | yes      |
+| 106008 | ZBH(yy)b (sig) | 1800 | 0.02     | yes      |
+| 106009 | ZBH(yy)b (sig) | 1800 | 0.02     | yes      |
+| 106010 | ZBH(yy)b (sig) | 2000 | 0.02     | yes      |
+| 106011 | ZBH(yy)b (sig) | 2000 | 0.02     | yes      |
+| 106012 | ZBH(yy)b (sig) | 2200 | 0.02     | yes      |
+| 106013 | ZBH(yy)b (sig) | 2200 | 0.02     | yes      |
+| 106014 | ZBH(yy)b (sig) | 2400 | 0.02     | yes      |
+| 106015 | ZBH(yy)b (sig) | 2400 | 0.02     | yes      |
+| 106016 | WBH(yy)b (sig) | 1000 | 0.02     | yes      |
+| 106017 | WBH(yy)b (sig) | 1000 | 0.02     | yes      |
+| 106018 | WBH(yy)b (sig) | 1200 | 0.02     | yes      |
+| 106019 | WBH(yy)b (sig) | 1200 | 0.02     | yes      |
+| 106020 | WBH(yy)b (sig) | 1400 | 0.02     | yes      |
+| 106021 | WBH(yy)b (sig) | 1400 | 0.02     | yes      |
+| 106022 | WBH(yy)b (sig) | 1600 | 0.02     | yes      |
+| 106023 | WBH(yy)b (sig) | 1600 | 0.02     | yes      |
+| 106024 | WBH(yy)b (sig) | 1800 | 0.02     | yes      |
+| 106025 | WBH(yy)b (sig) | 1800 | 0.02     | yes      |
+| 106026 | WBH(yy)b (sig) | 2000 | 0.02     | yes      |
+| 106027 | WBH(yy)b (sig) | 2000 | 0.02     | yes      |
+| 106028 | WBH(yy)b (sig) | 2200 | 0.02     | yes      |
+| 106029 | WBH(yy)b (sig) | 2200 | 0.02     | yes      |
+| 106030 | WBH(yy)b (sig) | 2400 | 0.02     | yes      |
+| 106031 | WBH(yy)b (sig) | 2400 | 0.02     | yes      |
 
 
 #### VLB Hb nominal samples, including t-channel processes (with reweighting, NLO PDF)

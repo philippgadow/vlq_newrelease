@@ -14,7 +14,7 @@ DSIDS="107000 107001 107002 107003 107004 107005 107006 107007 107008 107009 \
 
 EVENTS=10000               #Events per job
 NJOBS=1                    #Number of jobs per DSID
-RUNTIME="03:00:00"         #Run time per job HH:MM:SS
+RUNTIME="12:00:00"         #Run time per job HH:MM:SS
 MEMORY=2000                #Memory per job in MB
 
 cd batch_submission
