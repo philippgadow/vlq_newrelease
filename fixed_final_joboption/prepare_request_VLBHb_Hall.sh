@@ -20,6 +20,9 @@ for i in `ls ../../${INPUT}/`; do
     ln -sfn ../100000/MGPy8EG_A14NNPDF23LO_SingleVLQ_v2.py MGPy8EG_A14NNPDF23LO_SingleVLQ_v2.py
     ln -sfn ../100000/lhe_hacker_v2.py lhe_hacker_v2.py
     ln -sfn ../100000/VLQCouplingCalculator_v2.py VLQCouplingCalculator_v2.py
+    JONAME=`ls mc*`
+    unlink $JONAME
+    echo "include(\"MGPy8EG_A14NNPDF23LO_SingleVLQ_v2.py\")" > $JONAME
     cd ../
 done
 ls 

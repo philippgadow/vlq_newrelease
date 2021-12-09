@@ -8,18 +8,21 @@ rm -rf ${OUTPUT}
 
 mkdir -p ${OUTPUT}
 cd $OUTPUT
-mkdir -p 100xxx
-cd 100xxx
+mkdir -p 200xxx
+cd 200xxx
 
 # copy job options
 for i in `ls ../../${INPUT}/`; do
-    cp -r ../../${INPUT}/$i ${i/${DSID_START}/100}
-    cp ../../${LOGS}/mc16_13TeV.${i}.EVNT.*.log ${i/${DSID_START}/100}/log.generate
+    cp -r ../../${INPUT}/$i ${i/${DSID_START}/200}
+    cp ../../${LOGS}/mc16_13TeV.${i}.EVNT.*.log ${i/${DSID_START}/200}/log.generate
 
-    cd ${i/${DSID_START}/100}
-    ln -sfn ../100000/MGPy8EG_A14NNPDF23LO_SingleVLQ_v2.py MGPy8EG_A14NNPDF23LO_SingleVLQ_v2.py
-    ln -sfn ../100000/lhe_hacker_v2.py lhe_hacker_v2.py
-    ln -sfn ../100000/VLQCouplingCalculator_v2.py VLQCouplingCalculator_v2.py
+    cd ${i/${DSID_START}/200}
+    ln -sfn ../200000/MGPy8EG_A14NNPDF23LO_SingleVLQ_v2.py MGPy8EG_A14NNPDF23LO_SingleVLQ_v2.py
+    ln -sfn ../200000/lhe_hacker_v2.py lhe_hacker_v2.py
+    ln -sfn ../200000/VLQCouplingCalculator_v2.py VLQCouplingCalculator_v2.py
+    JONAME=`ls mc*`
+    unlink $JONAME
+    echo "include(\"MGPy8EG_A14NNPDF23LO_SingleVLQ_v2.py\")" > $JONAME
     cd ../
 done
 ls 
